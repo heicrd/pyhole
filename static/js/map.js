@@ -21,7 +21,7 @@ window.addEvent('domready', function() {
 		}
 		ws.onerror = ws.onclose = function(e) {
 			console.error('ws closed', e);
-			modal('ruh roh!');
+			modal('ruh roh');
 			ws.close();
 		}
 
@@ -84,7 +84,7 @@ window.addEvent('domready', function() {
 			}
 			break;
 		case 'ERR':
-			modal(message);
+			input_err(message);
 			break;
 		default:
 			console.warn('unhandled message', data);
@@ -372,9 +372,9 @@ window.addEvent('domready', function() {
 		modal(psDiv);
 		textarea.focus();
 	});
-
 	var add_form = $('add');
 	add_form.addEvent('submit', function(e) {
+		$('input_error').setStyle('display', 'none');
 		e.preventDefault();
 		var o = {};
 		add_form.getElements('input').each(function(el) {
@@ -390,7 +390,7 @@ window.addEvent('domready', function() {
 			}
 		});
 		if (o.dest === undefined) {
-			modal("you didn't specify a system name");
+			input_err("you didn't specify a system name");
 			return;
 		}
 		send('ADD', JSON.stringify(o));
@@ -464,5 +464,16 @@ window.addEvent('domready', function() {
 			mbg.setStyle('display', 'none');
 			mbg.removeEvents('click');
 		});
+	}
+
+	function input_err(el) {
+		var err_div = $('input_error');
+		err_div.empty();
+		if (el instanceof Element)
+			err_div.grab(el);
+		else
+			err_div.appendText(el);
+		err_div.inject($('add'), 'after');
+		err_div.setStyle('display', 'block');
 	}
 });
