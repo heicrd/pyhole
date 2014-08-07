@@ -21,7 +21,7 @@ window.addEvent('domready', function() {
 		}
 		ws.onerror = ws.onclose = function(e) {
 			console.error('ws closed', e);
-			modal('ruh roh');
+			modal('ruh roh!');
 			ws.close();
 		}
 
