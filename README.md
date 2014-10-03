@@ -4,9 +4,10 @@ pyhole is a wormhole connection mapping tool for [EVE online](http://www.youtube
 
 alternatives include
 
-- http://whmap.de/ (nice, but slow)
+- http://siggy.borkedlabs.com/pages/welcome
 - http://eveeye.com/ (confusing, slow, not built for mapping, buggy, not-free)
 - https://github.com/marbindrakon/eve-wspace
+- https://tripwire.cloud-things.com/
 
 it uses [websockets](http://caniuse.com/#search=websockets) when available and falls back onto AJAX for the in-game browser (but loses pushed updates because long-polling is stupid). drawing is done in [canvas](http://caniuse.com/#search=canvas) to make sure IE users can't use it (and the in-game browser has no dashed line support, so that's good too).
 
@@ -51,7 +52,7 @@ fedora: `python3-PyYAML`
 
         python3
             import db
-            db.create_user('raylu', 'a')
+            db.create_user('console', 'raylu', 'a')
 
 1. 
 
