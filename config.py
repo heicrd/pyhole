@@ -14,10 +14,18 @@ class WebConfig(Config):
 		'port',
 		'websocket_host',
 		'cookie_secret',
-		'oi_client_id',
-		'oi_client_secret',
-		'oi_redirect_uri',
+	])
+
+class OAuthConfig(Config):
+	attrs = frozenset([
+		'client_id',
+		'client_secret',
+		'redirect_uri',
+		'authorize_url',
+		'access_token_url',
+		'auth_user_url',
 	])
 
 __doc = yaml.load(open('config.yaml', 'r'))
 web = WebConfig(__doc['web'])
+oauth = OAuthConfig(__doc['oauth'])

@@ -30,7 +30,7 @@ class BaseHandler(tornado.web.RequestHandler):
 			try:
 				return int(user_id)
 			except ValueError:
-				return user_id # OI OAuth user
+				return user_id # OAuth user
 
 class MainHandler(BaseHandler):
 	def get(self):
@@ -48,21 +48,21 @@ class LoginHandler(BaseHandler):
 		else:
 			self.redirect('/')
 
-class OIHandler(BaseHandler, tornado.auth.OAuth2Mixin):
-	_OAUTH_AUTHORIZE_URL = 'https://oauth.talkinlocal.org/authorize'
-	_OAUTH_ACCESS_TOKEN_URL = 'https://oauth.talkinlocal.org/token'
+class OAuthHandler(BaseHandler, tornado.auth.OAuth2Mixin):
+	_OAUTH_AUTHORIZE_URL = config.oauth.authorize_url
+	_OAUTH_ACCESS_TOKEN_URL = config.oauth.access_token_url
 	def get(self):
 		code = self.get_argument('code', None)
 		if not code:
-			self.authorize_redirect(client_id=config.web.oi_client_id,
-					redirect_uri=config.web.oi_redirect_uri, scope=['auth_info'])
+			self.authorize_redirect(client_id=config.oauth.client_id,
+					redirect_uri=config.oauth.redirect_uri, scope=['auth_info'])
 			return
-		rt_url = self._oauth_request_token_url(client_id=config.web.oi_client_id,
-				client_secret=config.web.oi_client_secret, code=code,
-				redirect_uri=config.web.oi_redirect_uri, extra_params={'grant_type': 'authorization_code'})
+		rt_url = self._oauth_request_token_url(client_id=config.oauth.client_id,
+				client_secret=config.oauth.client_secret, code=code,
+				redirect_uri=config.oauth.redirect_uri, extra_params={'grant_type': 'authorization_code'})
 		data = self.fetch_json(rt_url)
 		access_token = data['access_token']
-		data = self.fetch_json('https://oauth.talkinlocal.org/api/v1/auth_user?access_token=' + access_token)
+		data = self.fetch_json(config.oauth.auth_user_url + access_token)
 		user = data['user']
 		if user['auth_status'] != 'Internal':
 			self.write(user['auth_status'] + ' users are not allowed')
@@ -334,7 +334,7 @@ if __name__ == '__main__':
 		handlers=[
 			(r'/', MainHandler),
 			(r'/login', LoginHandler),
-			(r'/oi', OIHandler),
+			(r'/oauth', OAuthHandler),
 			(r'/logout', LogoutHandler),
 			(r'/map', MapHandler),
 			(r'/map.ws', MapWSHandler),

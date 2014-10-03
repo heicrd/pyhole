@@ -2,9 +2,14 @@ web:
     port: 8888
     websocket_host: 'localhost:8888'
     cookie_secret: 'dis is super sekrit'
-    oi_client_id: null
-    oi_client_secret: null
-    oi_redirect_uri: 'http://127.0.0.1/oi'
+
+oauth:
+    client_id: null
+    client_secret: null
+    redirect_uri: 'http://127.0.0.1/oauth'
+    authorize_url: 'http://example.com/authorize'
+    access_token_url: 'http://example.com/token'
+    auth_user_url: 'http://example.com/api/v1/auth_user?access_token='
 
 db:
     host: localhost
