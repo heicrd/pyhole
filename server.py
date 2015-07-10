@@ -298,6 +298,8 @@ class MapWSHandler(DataHandler, tornado.websocket.WebSocketHandler):
 			websockets.remove(self)
 		except KeyError:
 			pass
+	def check_origin(self, origin):
+		return True
 
 class MapAJAXHandler(DataHandler, tornado.web.RequestHandler):
 	def get(self, command):
